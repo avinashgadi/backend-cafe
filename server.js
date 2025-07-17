@@ -16,6 +16,8 @@ mongoose.connect( `mongodb+srv://${DB_USER}:${PASSWORD}@cluster0.ea0md1f.mongodb
   });
 });
 // mongoose.connect('mongodb://localhost:27017/backend').then(()=>{
-
+// app.listen(8080, () => {
+//     console.log("Server started");
+// });
 // });
 app.use("/api/users", userRouter);
