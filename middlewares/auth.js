@@ -1,22 +1,21 @@
-import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv';
-dotenv.config();
+import jwt from "jsonwebtoken";
+const SECRET = "something";
 
 const authenticate = (req, res, next) => {
   try {
     let token = req.headers.authorization;
     token = token.split(" ")[1];
-    const user = jwt.verify(token, process.env.SECRET);
+    const user = jwt.verify(token, SECRET);
     req.role = user.role;
     next();
-  } catch (error) {
-    res.json({ message: "access denied" })
+  } catch (err) {
+    return res.json({ message: "Access Denied" });
   }
-}
+};
 
 const authorize = (role) => {
   return (req, res, next) => {
-    if(req.role === role) {
+    if (req.role === role) {
       next();
     } else {
       return res.json({ message: "Unauthorized Access" });
@@ -24,4 +23,4 @@ const authorize = (role) => {
   };
 };
 
-export { authenticate, authorize }
+export {authenticate,authorize}
