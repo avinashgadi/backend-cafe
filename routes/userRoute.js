@@ -1,33 +1,29 @@
 import express from "express";
 import { authenticate, authorize } from "../middlewares/auth.js";
+const Router = express.Router();
 import {
   register,
   login,
-  showUsers,
+  profile,
   updateUser,
   deleteUser,
-  profile,
+  showUsers,
   updateProfile,
   getUser,
+  addUser,
 } from "../controllers/userController.js";
 
-const app = express();
+//user routes
+Router.post("/register", register);
+Router.post("/login", login);
+Router.get("/:id/profile", profile);
+Router.patch("/:id/profile", updateProfile);
 
-app.use(express.json());
+//admin routes
+Router.get("/",  showUsers);
+Router.post("/",  addUser);
+Router.get("/:id",   getUser);
+Router.patch("/:id",  updateUser);
+Router.delete("/:id",   deleteUser);
 
-const userRouter = express.Router();
-
-userRouter.get("/", (req, res) => {
-  res.json({ message: "Hello from server!!" })
-})
-userRouter.post("/register", register); // user registration
-userRouter.post("/login", login); // login user
-userRouter.get("/:id/profile", authenticate, profile); // view own (user) profile
-userRouter.patch("/:id/profile", authenticate, updateProfile) // update logged-in user(own profile)
-// userRouter.patch("/:id/password", ) // change password (with old password)
-userRouter.get("/showusers", showUsers); // view all users
-userRouter.get("/:id", authenticate, authorize("admin"), getUser) // get a user by ID
-userRouter.patch("/:id", authenticate, authorize("admin"), updateUser); // update a user
-userRouter.delete("/:id", authenticate, authorize("admin"), deleteUser); // delete a user
-
-export default userRouter;
+export default Router;
